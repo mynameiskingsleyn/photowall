@@ -1,0 +1,182 @@
+ReactJS Photowall
+
+useful page —> https://create-react-app.dev/
+install react app helper ==>  npm install -g create-react-app (this comes with all the packages => marble, )
+Create a project —> npx create-react-app my-app (note it is not npm it is npx)
+Start app server—> yarn start.   your app would be running in localhost:3000 (npm run dev), npm start
+ 	NOTE: suggestions —> also run npm init react-app first-app
+Default view
+	react works with root.
+React dom —>
+	what is react dom —> this is a package that provides dom specific methods that can be used at the top level of the web application
+	it provides developer to manage elements of the web page by providing Apis for this.
+
+Start ==>
+	React uses components just like vue but with some difference.
+	components are like functions.
+	css files are imported inside the file with the functions. eg App.js, App.css.
+	entry point is index.js…
+
+Creating variables and attributes
+	variable—> 			const element = 'hello my friend';
+	Attribute(jsx) —>		const jsxAttributes = <img src={logo} width=“25%” height=“25%” />
+
+Structure.. —> app.js is the parent component, we should create child components.
+
+props —> in order to receive property from parent component we have to pass it into the child—> eg. <myfunction name=“jacob” />
+	and in the child component we have to use props keyword e.g function my function(props){ …… }
+	NOTE.. components functions must start with uppercase letter and so on the html .
+Classes —>
+	Unlike function files,  Class has a render function in it —> render(){ return(<div> </div> )       }
+	Classes can have constructors and this constructors uses state to initialize class attributes
+	constructor(){ super(); this.state = { count: 0, item:”tank”}  } we can use a this.setState to set values in a function e.g
+	countNumber(){ this.setState((prevalue)=>{ return{count:prevalue.count +1 }    } )  }  The setState method has the previous value and can return
+	an object setting the values of chosen items.
+	To use this function you have to bind it in the constructor ==> this.countNumber = this.countNumber.bind.
+Difference between function components and class components
+	function components are just a plane javascript functions, you can not use state and setState methods as well as life cycles.
+Life cycle methods —>
+	Most important function in a class component is render()
+	after render is called, DidMount is next.
+	componentDidMount()
+		initialized state of our component.
+	componentDidUpdate(prevProps, prevState){ }
+		Gets run after component is updated
+	ComponentWillUnmount()
+
+Routes—>
+	React is used to build a single page application, routing makes it possible for users to navigate between components.
+	command —> npm  install —save react-router-dom@4.2.2
+	Different types
+		Memory Router
+			useful for testing and none browser environment. it does not have back.
+		Hash Router
+			use to handle legacy browsers, or does not have server logic to handle server side
+		BrowserRouter
+			Most popular, for push state, pop state etc.
+	We configure our router in the index.js file by first importing the router and route from react-router-dom and replacing the app component with
+	router component
+	import {BrowserRouter as Router, Route} from 'react-router-dom';
+
+	ReactDOM.render(
+   		<React.StrictMode>
+    			<App />
+   		</React.StrictMode>,
+		document.getElementById('root')
+ 		);
+
+
+	ReactDOM.render(
+  		<React.StrictMode>
+    			<Router>
+        				<Route exact path="/" component ={App} />
+        				<Route path="/users" component ={Users} />
+        				<Route path="/contact" component ={Contact} />
+    			</Router>
+  		</React.StrictMode>,
+  		document.getElementById('root')
+		);
+	Link property —>
+	in order to complete this, we need the link property.
+	In App.js we will import the link — > import {Link} from 'react-router-dom';
+	Used as —> <Link to ="">Go to Contact </Link>
+	Implement 404.
+		We use <switch></switch> <route> in the switch. and create a 404 component
+
+Redux =>
+	install = npm install redux@3.7.2
+	action< —Store <—Reducer<—action
+	React redux binding —> needed to bind our store to our component
+		To do this we need react-redux since we are working with react
+		installation ==> npm install react-redux@5.0.6
+			installing react redux gives us access to the provider, makes it possible for the store to be passed directory to the components.
+			Serves one purpose.
+
+PROJECT START
+	Using firebase. —> we go to firebase.com and create project.  and copy the necessary lines
+	—> npm install —save firebase
+
+	Install bootstrap —> npm install react-bootstrap bootstrap
+
+
+props type
+	we need to install prop-types ==> npm install —save prop-types@15.5.7
+
+Tutorial video
+	49(actions),
+		Mapping actions to reducers from App.Js using functions and Library —> {bindActionCreators} from 'redux';
+	50(Updating state)
+		State in redux is read only so we can not use setState.
+	51(Actions add)
+		Because redux store was added the link will not work anymore
+			to fix we have to go to where ever we are connecting our store and import {withRouter} from ‘react-router’
+			now we wrap the entire thing with the withRouter => const App = withRouter(connect(mapStateToProps,mapDispatchToProps)(Main))
+
+	53. Redux dev tools
+		google—> redux dev tools. select zalmoxisus /redux-devtools-extension
+		after adding extension to chrome, follow the instruction to add to our app.  this would be where the store is created ==> const store =
+		createStore(rootReducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
+		super useful
+
+
+	56(UI setup. add comment)
+
+	57(Adding comment)
+		Working with the reducer part.
+		 	we create a reducer for comments.
+			We can only have one reducer for app so we need to combine these reducers
+				how? ==> import {combineReducers} from ‘redux’   do this inside reducer.js .
+	58(Selectively loading comments)
+		just a few changes
+
+	59(Comment count)
+
+	61( Over view)
+	62(Firebase)
+		Goto => https://firebase.google.com
+		  Here we will be using the Database(Realtime Database).
+		  Disable authentication => go to rules and disable. by making everything true.
+		  To use in our application, we need connection strings
+			GoTo Project Overview
+			we need to install firebase ==> npm install firebase .
+			we need to create a config file where we set up the configurations.
+
+		To now utilize this we will need to return a method from our action creators, instead of an action.
+		we need to run an asynchronous function to update our db.
+		We cannot return methods orelse we use a thunk.
+		inside terminal ==> npm install redux-thunk@2.2.0
+
+		To do this, thunk must be return as an extension btw the moment it dispatches an action and when it reaches the reducer.
+		should be applied as a middleware. We need to import applyMiddleware from redux
+		import {createStore, applyMiddleware } from 'redux';
+		We also need to import thunk from redux-thunk.
+		import thunk from 'redux-thunk';
+	63(updating database)
+		Link ==> https://console.firebase.google.com/u/0/project/photowall-7cc79/database/photowall-7cc79/data/~2Fposts
+
+	64(Fetching post)
+		We always going to return a dispatch ==>
+			with firebase we can do this ==> database.ref('posts').once()
+			You can use once or on, On means it has to keep watching database. but ‘once’ means once.
+			we have something like this ==> database.ref('posts').once('value').then((snapshot) => { })
+			note since this is a nosql snapshot has two values ==> key, val, we only care about the key
+				so we run through each snapshot and pull key
+	65(Remove Post)
+		Easy, just remove from db and dispatch the action
+		return database.ref(`posts/${id}`).remove().then(() => { } )
+	saving comments .
+
+	67(Loading comments)
+		because of his set up which is comments/postid => [] array of comments.
+		ones we get the snapshot we do  below having comments as an object.
+			snapshot.forEach((child) => { comments[child.key] = Object.values([childsnapshot.val()])  Note that child snap shot has a bunch of values
+				comments
+					post_id
+						+comment_id:  value
+						+comment_id: value
+
+	70(Debugging)
+		1. refreshing single post crashing —> on refresh post array is empty.
+			issue even though we are using redux we need to be using component state.
+			why, when we are dealing with states that are not global to the application, we need to use component state.
+			we need to use a loader
